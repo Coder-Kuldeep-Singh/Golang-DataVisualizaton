@@ -24,19 +24,16 @@
   </head>
   <body style="background: #ebeff2;">
     <!-- <nav class="navbar navbar-light bg-light univesal-shadow">
-        <div class="navbar-brand">
-         <span>Radar</span>
-        </div>
-        <div class="navbar-content">
-            <button class="btn">Radar View</button>
-            <button class="btn">Quick Guide</button>
-            <button class="btn ">Feedback</button>
-        </div>
-      </nav> -->
-    <div
-      class="container-fluid universal_padding"
-      style="padding-bottom: 30px;"
-    >
+      <div class="navbar-brand">
+        <span>Radar</span>
+      </div>
+      <div class="navbar-content">
+        <button class="btn">Radar View</button>
+        <button class="btn">Quick Guide</button>
+        <button class="btn">Feedback</button>
+      </div>
+    </nav> -->
+    <div class="container-fluid universal_padding" style="padding: 30px;">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -48,19 +45,25 @@
             </div>
           </div>
         </div>
+
         <!-- block of top 10 values -->
-        <div class="row universal_padding">
+        <div class="row universal_padding" style="padding: 15px;">
+          <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> -->
+          <div class="row" style="padding-left: 17px;">
+            <h5 class="card-title">Top Ten Topics</h5>
+          </div>
+          <!-- </div> -->
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="row">
-              <h5 class="card-title">Top Ten Topics</h5>
-            </div>
-          </div>
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="row" style="padding: 20px;">
               {{range .top}} {{if .Topic}}
               <div
                 class="card"
-                style="height: 150px; width: 20%; text-align: center;"
+                style="
+                  height: 150px;
+                  width: 19%;
+                  text-align: center;
+                  margin: 5px;
+                "
               >
                 <span style="padding: 15px;">{{.Topic}}</span>
               </div>
@@ -68,28 +71,41 @@
             </div>
           </div>
         </div>
+
         <!-- table data -->
-        <div class="row">
+        <div class="row" style="padding: 20px;">
           <div
             class="col-lg-12 col-md-12 col-sm-12 col-xs-12 card universal_padding"
-            style="height: auto;"
+            style="height: auto; padding: 20px;"
           >
             <div class="row universal_padding">
               <div
                 class="col-lg-12 col-md-12 col-sm-12 col-xs-12 universal_padding"
               >
+                <form action="" method="POST">
+                  <div>
+                    <div>
+                      <select id="perpage" name="Perpage">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="75">75</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
                 <div
                   class="table-responsive table-striped table-hover table-bordered"
                 >
                   <table id="example" class="" style="padding: 0;">
                     <thead>
-                      <th>Title</th>
-                      <th>Topic</th>
-                      <th>Year</th>
-                      <th>Intensity</th>
-                      <th>Sector</th>
-                      <th>Region</th>
-                      <th>Pestle</th>
+                      <th style="padding: 15px;">Title</th>
+                      <th style="padding: 15px;">Topic</th>
+                      <th style="padding: 15px;">Year</th>
+                      <th style="padding: 15px;">Intensity</th>
+                      <th style="padding: 15px;">Sector</th>
+                      <th style="padding: 15px;">Region</th>
+                      <th style="padding: 15px;">Pestle</th>
                     </thead>
                     <tbody>
                       <script>
