@@ -8,6 +8,15 @@ type Top struct {
 	Topic string
 }
 
+func CloudChart() string {
+	data := Decoded()
+	cloud := ""
+	for _, d := range data {
+		cloud += d.Topic + " "
+	}
+	return cloud
+}
+
 func AllTitles() []string {
 	data := Decoded()
 	var Titles []string
