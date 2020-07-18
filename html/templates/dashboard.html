@@ -92,7 +92,17 @@
                         <option value="100">100</option>
                       </select>
                     </div>
-                    <div></div>
+                    <div>
+                      <input
+                        type="text"
+                        list="drop"
+                        class="form-regis"
+                        id="myInput"
+                        onInput="GetLocation(event)"
+                        placeholder="Search"
+                      />
+                    </div>
+                    <div class="drop-down"></div>
                   </div>
                 </form>
                 <div
@@ -192,6 +202,73 @@
         id: "myChart",
         data: chartConfig,
       });
+    </script>
+
+    <!-- script to for dropdown suggestion -->
+    <script>
+      function GetLocation(event) {
+        var location = event.target.value;
+        // console.log(location);
+
+        var New_location = location.toLowerCase();
+
+        var cities = [];
+
+        {{range .payload}}
+          cities.push({{.Title}});
+        {{end}}
+        // console.log(cities);
+
+        var dropdown_locations = [];
+
+        for( var i=0;i<cities.length;i++ ){
+          var loc = cities[i].toLowerCase();
+          // console.log(loc);
+          var exists = loc.includes(New_location); //if value is anywhere is the string
+          // var exists = loc.startsWith(New_location); // if the string start with given string
+          if (exists) {
+            dropdown_locations.push(cities[i]);
+          }
+        }
+        var dropdown_length = dropdown_locations.length;
+        // console.log(dropdown_length);
+
+        // // Remove all existing elements
+        var existing = document.querySelector(".drop-down");
+        // existing = document.querySelector(".drop-down");
+        existing.innerHTML = "";
+
+        var para = document.createElement('datalist');
+        para.id = "drop";
+        if( dropdown_length > 25){
+          for(var j=0;j<25;j++){
+            var drop = dropdown_locations[j];
+            Show(drop,New_location,existing,para);
+          }
+        }else {
+            for(var j=0;j<dropdown_length;j++){
+              var drop = dropdown_locations[j];
+              Show(drop,New_location,existing,para);
+          }
+        }
+        //  var response =
+        //  console.log(response);
+      }
+
+      function Show(drop, location, existing, para) {
+        // console.log(location)
+        // var send_data = document.querySelector(".drop-down");
+        if (location != "") {
+          // send_data.innerHTML = "<p>" + drop + "</p>";
+          var submenu = document.createElement("option");
+          submenu.value = drop;
+          para.appendChild(submenu);
+          // para.innerHTML = drop;
+          existing.appendChild(para);
+        } else {
+          existing.innerHTML = "";
+        }
+      }
     </script>
   </body>
 </html>
