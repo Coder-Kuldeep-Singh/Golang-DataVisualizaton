@@ -125,7 +125,7 @@
                     <tbody id="table_body"></tbody>
                   </table>
                 </div>
-                <div id="remaining"></div>
+                <div id="remaining" class="my-4"></div>
               </div>
             </div>
           </div>
@@ -275,7 +275,7 @@
             });
           {{end}}
           var remains = document.getElementById("remaining");
-          remains.innerHTML = `<span>
+          remains.innerHTML = `<span class="badge badge-dark" style="padding:10px;">
             Showing 1 to 10 of 1,000 entries
             </span>`;
           // console.log('Showing 1 to 10 of 1,000 entries');
@@ -324,7 +324,7 @@
             });
           {{end}}
           var remains = document.getElementById("remaining");
-          remains.innerHTML = `<span>
+          remains.innerHTML = `<span class="badge badge-dark"  style="padding:10px;">
             Showing 1 to ${selectedValue} of ${structured_data.length - 1} entries
           </span>`;
           // console.log(`Showing 1 to ${selectedValue} of ${structured_data.length - 1} entries`);
