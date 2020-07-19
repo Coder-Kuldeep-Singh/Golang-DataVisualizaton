@@ -22,7 +22,7 @@
 
     <title>Interactive Dashboard</title>
   </head>
-  <body style="background: #ebeff2;">
+  <body style="background: #ebeff2;" onload="Default_Table()">
     <!-- <nav class="navbar navbar-light bg-light univesal-shadow">
       <div class="navbar-brand">
         <span>Radar</span>
@@ -85,7 +85,11 @@
                 <form action="" method="POST">
                   <div>
                     <div>
-                      <select id="perpage" name="Perpage">
+                      <select
+                        id="perpage"
+                        name="Perpage"
+                        onchange="SelectFilter(this)"
+                      >
                         <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="75">75</option>
@@ -118,26 +122,7 @@
                       <th style="padding: 15px;">Region</th>
                       <th style="padding: 15px;">Pestle</th>
                     </thead>
-                    <tbody>
-                      <!-- <script>
-                        // var cloud = "";
-                      </script> -->
-                      {{range .payload}}
-                      <tr>
-                        <td style="padding: 15px;">{{.Title}}</td>
-                        <td style="padding: 15px;">{{.Topic}}</td>
-                        <td style="padding: 15px;">{{.Start_Year}}</td>
-                        <td style="padding: 15px;">{{.Intensity}}</td>
-                        <td style="padding: 15px;">{{.Sector}}</td>
-                        <td style="padding: 15px;">{{.Region}}</td>
-                        <td style="padding: 15px;">{{.Pestle}}</td>
-                      </tr>
-                      <script>
-                        // cloud += {{.Topic}} + " ";
-                        // console.log(cloud)
-                      </script>
-                      {{end}}
-                    </tbody>
+                    <tbody id="table_body"></tbody>
                   </table>
                 </div>
               </div>
@@ -206,68 +191,149 @@
 
     <!-- script to for dropdown suggestion -->
     <script>
-      function GetLocation(event) {
-        var location = event.target.value;
-        // console.log(location);
+        function GetLocation(event) {
 
-        var New_location = location.toLowerCase();
+          var location = event.target.value;
+          // console.log(location);
 
-        var cities = [];
+          var New_location = location.toLowerCase();
 
-        {{range .payload}}
-          cities.push({{.Title}});
-        {{end}}
-        // console.log(cities);
+          var cities = [];
 
-        var dropdown_locations = [];
+          {{range .payload}}
+            cities.push({{.Title}});
+          {{end}}
+          // console.log(cities);
 
-        for( var i=0;i<cities.length;i++ ){
-          var loc = cities[i].toLowerCase();
-          // console.log(loc);
-          var exists = loc.includes(New_location); //if value is anywhere is the string
-          // var exists = loc.startsWith(New_location); // if the string start with given string
-          if (exists) {
-            dropdown_locations.push(cities[i]);
+          var dropdown_locations = [];
+
+          for( var i=0;i<cities.length;i++ ){
+            var loc = cities[i].toLowerCase();
+            // console.log(loc);
+            var exists = loc.includes(New_location); //if value is anywhere is the string
+            // var exists = loc.startsWith(New_location); // if the string start with given string
+            if (exists) {
+              dropdown_locations.push(cities[i]);
+            }
           }
-        }
-        var dropdown_length = dropdown_locations.length;
-        // console.log(dropdown_length);
 
-        // // Remove all existing elements
-        var existing = document.querySelector(".drop-down");
-        // existing = document.querySelector(".drop-down");
-        existing.innerHTML = "";
+          var dropdown_length = dropdown_locations.length;
+          // console.log(dropdown_length);
 
-        var para = document.createElement('datalist');
-        para.id = "drop";
-        if( dropdown_length > 25){
-          for(var j=0;j<25;j++){
-            var drop = dropdown_locations[j];
-            Show(drop,New_location,existing,para);
-          }
-        }else {
-            for(var j=0;j<dropdown_length;j++){
+          // // Remove all existing elements
+          var existing = document.querySelector(".drop-down");
+          // existing = document.querySelector(".drop-down");
+          existing.innerHTML = "";
+
+          var para = document.createElement('datalist');
+          para.id = "drop";
+          if( dropdown_length > 25){
+            for(var j=0;j<25;j++){
               var drop = dropdown_locations[j];
               Show(drop,New_location,existing,para);
+            }
+          }else {
+              for(var j=0;j<dropdown_length;j++){
+                var drop = dropdown_locations[j];
+                Show(drop,New_location,existing,para);
+            }
           }
         }
-        //  var response =
-        //  console.log(response);
+
+        function Show(drop, location, existing, para) {
+          if (location != "") {
+            var submenu = document.createElement("option");
+            submenu.value = drop;
+            para.appendChild(submenu);
+            existing.appendChild(para);
+          } else {
+            existing.innerHTML = "";
+          }
+        }
+
+      function Default_Table() {
+        var structured_data = [{
+            "Title":"",
+            "Topic":"",
+            "Start_Year":0,
+            "Intensity":0,
+            "Sector":"",
+            "Region":"",
+            "Pestle":""
+          }];
+
+          {{range .payload}}
+            structured_data.push({
+            "Title":{{.Title}},
+            "Topic":{{.Topic}},
+            "Start_Year":{{.Start_Year}},
+            "Intensity":{{.Intensity}},
+            "Sector":{{.Sector}},
+            "Region":{{.Region}},
+            "Pestle":{{.Pestle}}
+            });
+          {{end}}
+          // console.log(structured_data)
+          var body = document.getElementById("table_body");
+          var table = "";
+          for(var i=1;i<=25;i++){
+              // console.log(structured_data[i].Title);
+              table += `<tr>
+                <td style="padding: 15px;">${structured_data[i].Title}</td>
+                <td style="padding: 15px;">${structured_data[i].Topic}</td>
+                <td style="padding: 15px;">${structured_data[i].Start_Year}</td>
+                <td style="padding: 15px;">${structured_data[i].Intensity}</td>
+                <td style="padding: 15px;">${structured_data[i].Sector}</td>
+                <td style="padding: 15px;">${structured_data[i].Region}</td>
+                <td style="padding: 15px;">${structured_data[i].Pestle}</td>
+              </tr>`
+
+          }
+          body.innerHTML = table;
       }
 
-      function Show(drop, location, existing, para) {
-        // console.log(location)
-        // var send_data = document.querySelector(".drop-down");
-        if (location != "") {
-          // send_data.innerHTML = "<p>" + drop + "</p>";
-          var submenu = document.createElement("option");
-          submenu.value = drop;
-          para.appendChild(submenu);
-          // para.innerHTML = drop;
-          existing.appendChild(para);
-        } else {
-          existing.innerHTML = "";
-        }
+
+       function SelectFilter(options){
+          var selectedValue = options.value;
+          console.log(selectedValue);
+          var structured_data = [{
+            "Title":"",
+            "Topic":"",
+            "Start_Year":0,
+            "Intensity":0,
+            "Sector":"",
+            "Region":"",
+            "Pestle":""
+          }];
+
+          {{range .payload}}
+            structured_data.push({
+            "Title":{{.Title}},
+            "Topic":{{.Topic}},
+            "Start_Year":{{.Start_Year}},
+            "Intensity":{{.Intensity}},
+            "Sector":{{.Sector}},
+            "Region":{{.Region}},
+            "Pestle":{{.Pestle}}
+            });
+          {{end}}
+          // console.log(structured_data)
+          var body = document.getElementById("table_body");
+          var table = "";
+          for(var i=1;i<=selectedValue;i++){
+              // console.log(structured_data[i].Title);
+              table += `<tr>
+                <td style="padding: 15px;">${structured_data[i].Title}</td>
+                <td style="padding: 15px;">${structured_data[i].Topic}</td>
+                <td style="padding: 15px;">${structured_data[i].Start_Year}</td>
+                <td style="padding: 15px;">${structured_data[i].Intensity}</td>
+                <td style="padding: 15px;">${structured_data[i].Sector}</td>
+                <td style="padding: 15px;">${structured_data[i].Region}</td>
+                <td style="padding: 15px;">${structured_data[i].Pestle}</td>
+              </tr>`
+
+          }
+          body.innerHTML = table;
       }
     </script>
   </body>
