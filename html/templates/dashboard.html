@@ -125,6 +125,7 @@
                     <tbody id="table_body"></tbody>
                   </table>
                 </div>
+                <div id="remaining"></div>
               </div>
             </div>
           </div>
@@ -273,6 +274,11 @@
             "Pestle":{{.Pestle}}
             });
           {{end}}
+          var remains = document.getElementById("remaining");
+          remains.innerHTML = `<span>
+            Showing 1 to 10 of 1,000 entries
+            </span>`;
+          // console.log('Showing 1 to 10 of 1,000 entries');
           // console.log(structured_data)
           var body = document.getElementById("table_body");
           var table = "";
@@ -295,7 +301,7 @@
 
        function SelectFilter(options){
           var selectedValue = options.value;
-          console.log(selectedValue);
+          // console.log(selectedValue);
           var structured_data = [{
             "Title":"",
             "Topic":"",
@@ -317,6 +323,11 @@
             "Pestle":{{.Pestle}}
             });
           {{end}}
+          var remains = document.getElementById("remaining");
+          remains.innerHTML = `<span>
+            Showing 1 to ${selectedValue} of ${structured_data.length - 1} entries
+          </span>`;
+          // console.log(`Showing 1 to ${selectedValue} of ${structured_data.length - 1} entries`);
           // console.log(structured_data)
           var body = document.getElementById("table_body");
           var table = "";
