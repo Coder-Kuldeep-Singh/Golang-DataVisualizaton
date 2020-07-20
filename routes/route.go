@@ -2,6 +2,7 @@ package routes
 
 import (
 	"Dashboard/controllers"
+	"Dashboard/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +15,11 @@ func SetupRouter() *gin.Engine {
 	router.Static("/home", "./html/css")
 
 	router.GET("/", controllers.TableDataSend)
+	api := router.Group("/api")
+	{
+		api.GET("/json/data", services.GetAll)
+	}
 	// router.GET("/role/:role", controllers.GetHomeWithRole)
-	// router.GET("/tnc", controllers.GetTNC)
+	router.NoRoute(controllers.PageNotFound)
 	return router
 }
