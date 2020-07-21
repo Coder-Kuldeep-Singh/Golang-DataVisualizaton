@@ -12,7 +12,7 @@ func SetupRouter() *gin.Engine {
 	router := gin.Default()
 
 	router.LoadHTMLGlob("html/templates/*")
-	router.Static("/home", "./html/css")
+	router.Static("/home", "html/static")
 
 	router.GET("/", controllers.TableDataSend)
 	api := router.Group("/api")
