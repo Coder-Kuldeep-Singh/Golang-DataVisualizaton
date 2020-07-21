@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Yeon+Sung&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./home/css/style.css" />
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script src="./home/js/getdata.js"></script>
+    <script src="./home/js/graph.js"></script>
+
+    <title>Interactive Dashboard</title>
+  </head>
+  <body style="background: #ebeff2;" onload="Default_Table()">
+    <!-- <nav class="navbar navbar-light bg-light univesal-shadow">
+      <div class="navbar-brand">
+        <span>Radar</span>
+      </div>
+      <div class="navbar-content">
+        <button class="btn">Radar View</button>
+        <button class="btn">Quick Guide</button>
+        <button class="btn">Feedback</button>
+      </div>
+    </nav> -->
+    <div class="container-fluid universal_padding" style="padding: 30px;">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div
+              class="card univesal-shadow universal_border_radius"
+              style="height: auto;"
+            >
+              <div id="myChart" class="chart--container"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- block of top 10 values -->
+        <div class="row universal_padding" style="padding: 15px;">
+          <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> -->
+          <div class="row" style="padding-left: 17px;">
+            <h5 class="card-title">Top Ten Topics</h5>
+          </div>
+          <!-- </div> -->
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+              {{range .top}} {{if .Topic}}
+              <div
+                class="card"
+                style="
+                  height: 150px;
+                  width: 19%;
+                  text-align: center;
+                  margin: 5px;
+                "
+              >
+                <span style="padding: 15px;">{{.Topic}}</span>
+              </div>
+              {{end}} {{end}}
+            </div>
+          </div>
+        </div>
+
+        <!-- table data -->
+        <div class="row" style="padding: 20px;">
+          <div
+            class="col-lg-12 col-md-12 col-sm-12 col-xs-12 card universal_padding"
+            style="height: auto; padding: 20px;"
+          >
+            <div class="row universal_padding">
+              <div
+                class="col-lg-12 col-md-12 col-sm-12 col-xs-12 universal_padding"
+              >
+                <form action="" method="POST">
+                  <div>
+                    <div>
+                      <select
+                        id="perpage"
+                        name="Perpage"
+                        onchange="SelectFilter(this)"
+                      >
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        list="drop"
+                        class="form-regis"
+                        id="myInput"
+                        onInput="GetLocation(event)"
+                        placeholder="Search"
+                      />
+                    </div>
+                    <div class="drop-down"></div>
+                  </div>
+                </form>
+                <div
+                  class="table-responsive table-striped table-hover table-bordered"
+                >
+                  <table id="example" class="" style="padding: 0;">
+                    <thead>
+                      <th style="padding: 15px;">Title</th>
+                      <th style="padding: 15px;">Topic</th>
+                      <th style="padding: 15px;">Year</th>
+                      <th style="padding: 15px;">Intensity</th>
+                      <th style="padding: 15px;">Sector</th>
+                      <th style="padding: 15px;">Region</th>
+                      <th style="padding: 15px;">Pestle</th>
+                    </thead>
+                    <tbody id="table_body"></tbody>
+                  </table>
+                </div>
+                <div id="remaining" class="my-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <script>
+      var clouddata = {{.cloud}};
+    </script> -->
+    <!-- <script>
+      // ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+      let chartConfig = {
+        type: "wordcloud",
+        options: {
+          text: clouddata,
+          aspect: "spiral",
+          colorType: "palette",
+          ignore: ["establish", "this"],
+          maxItems: 50,
+          minLength: "4px",
+          palette: [
+            "#D32F2F",
+            "#1976D2",
+            "#9E9E9E",
+            "#E53935",
+            "#1E88E5",
+            "#7E57C2",
+            "#F44336",
+            "#2196F3",
+            "#A1887F",
+          ],
+          rotate: true,
+          style: {
+            tooltip: {
+              text: "Frequncy %hits",
+              padding: "5px",
+              alpha: 0.9,
+              backgroundColor: "#D32F2F",
+              borderColor: "none",
+              borderRadius: "3px",
+              fontColor: "white",
+              fontFamily: "Georgia",
+              textAlpha: 1,
+              visible: true,
+              width: "100px",
+              wrapText: true,
+            },
+            fontFamily: "Merriweather",
+            hoverState: {
+              backgroundColor: "#1976D2",
+              borderColor: "none",
+              borderRadius: "3px",
+              fontColor: "white",
+            },
+          },
+        },
+      };
+
+      zingchart.render({
+        id: "myChart",
+        data: chartConfig,
+      });
+    </script> -->
+
+    <!-- script to for dropdown suggestion -->
+    <!-- <script>
+        function GetLocation(event) {
+
+          var location = event.target.value;
+          // console.log(location);
+
+          var New_location = location.toLowerCase();
+
+          var cities = [];
+
+          {{range .payload}}
+            cities.push({{.Title}});
+          {{end}}
+          // console.log(cities);
+
+          var dropdown_locations = [];
+
+          for( var i=0;i<cities.length;i++ ){
+            var loc = cities[i].toLowerCase();
+            // console.log(loc);
+            var exists = loc.includes(New_location); //if value is anywhere is the string
+            // var exists = loc.startsWith(New_location); // if the string start with given string
+            if (exists) {
+              dropdown_locations.push(cities[i]);
+            }
+          }
+
+          var dropdown_length = dropdown_locations.length;
+          // console.log(dropdown_length);
+
+          // // Remove all existing elements
+          var existing = document.querySelector(".drop-down");
+          // existing = document.querySelector(".drop-down");
+          existing.innerHTML = "";
+
+          var para = document.createElement('datalist');
+          para.id = "drop";
+          if( dropdown_length > 25){
+            for(var j=0;j<25;j++){
+              var drop = dropdown_locations[j];
+              Show(drop,New_location,existing,para);
+            }
+          }else {
+              for(var j=0;j<dropdown_length;j++){
+                var drop = dropdown_locations[j];
+                Show(drop,New_location,existing,para);
+            }
+          }
+        }
+
+        function Show(drop, location, existing, para) {
+          if (location != "") {
+            var submenu = document.createElement("option");
+            submenu.value = drop;
+            para.appendChild(submenu);
+            existing.appendChild(para);
+          } else {
+            existing.innerHTML = "";
+          }
+        }
+
+      function Default_Table() {
+        var structured_data = [{
+            "Title":"",
+            "Topic":"",
+            "Start_Year":0,
+            "Intensity":0,
+            "Sector":"",
+            "Region":"",
+            "Pestle":""
+          }];
+
+          {{range .payload}}
+            structured_data.push({
+            "Title":{{.Title}},
+            "Topic":{{.Topic}},
+            "Start_Year":{{.Start_Year}},
+            "Intensity":{{.Intensity}},
+            "Sector":{{.Sector}},
+            "Region":{{.Region}},
+            "Pestle":{{.Pestle}}
+            });
+          {{end}}
+          var remains = document.getElementById("remaining");
+          remains.innerHTML = `<span class="badge badge-dark" style="padding:10px;">
+            Showing 1 to 10 of 1,000 entries
+            </span>`;
+          // console.log('Showing 1 to 10 of 1,000 entries');
+          // console.log(structured_data)
+          var body = document.getElementById("table_body");
+          var table = "";
+          for(var i=1;i<=10;i++){
+              // console.log(structured_data[i].Title);
+              table += `<tr>
+                <td style="padding: 15px;">${structured_data[i].Title}</td>
+                <td style="padding: 15px;">${structured_data[i].Topic}</td>
+                <td style="padding: 15px;">${structured_data[i].Start_Year}</td>
+                <td style="padding: 15px;">${structured_data[i].Intensity}</td>
+                <td style="padding: 15px;">${structured_data[i].Sector}</td>
+                <td style="padding: 15px;">${structured_data[i].Region}</td>
+                <td style="padding: 15px;">${structured_data[i].Pestle}</td>
+              </tr>`
+
+          }
+          body.innerHTML = table;
+      }
+
+
+       function SelectFilter(options){
+          var selectedValue = options.value;
+          // console.log(selectedValue);
+          var structured_data = [{
+            "Title":"",
+            "Topic":"",
+            "Start_Year":0,
+            "Intensity":0,
+            "Sector":"",
+            "Region":"",
+            "Pestle":""
+          }];
+
+          {{range .payload}}
+            structured_data.push({
+            "Title":{{.Title}},
+            "Topic":{{.Topic}},
+            "Start_Year":{{.Start_Year}},
+            "Intensity":{{.Intensity}},
+            "Sector":{{.Sector}},
+            "Region":{{.Region}},
+            "Pestle":{{.Pestle}}
+            });
+          {{end}}
+          var remains = document.getElementById("remaining");
+          remains.innerHTML = `<span class="badge badge-dark"  style="padding:10px;">
+            Showing 1 to ${selectedValue} of ${structured_data.length - 1} entries
+          </span>`;
+          // console.log(`Showing 1 to ${selectedValue} of ${structured_data.length - 1} entries`);
+          // console.log(structured_data)
+          var body = document.getElementById("table_body");
+          var table = "";
+          for(var i=1;i<=selectedValue;i++){
+              // console.log(structured_data[i].Title);
+              table += `<tr>
+                <td style="padding: 15px;">${structured_data[i].Title}</td>
+                <td style="padding: 15px;">${structured_data[i].Topic}</td>
+                <td style="padding: 15px;">${structured_data[i].Start_Year}</td>
+                <td style="padding: 15px;">${structured_data[i].Intensity}</td>
+                <td style="padding: 15px;">${structured_data[i].Sector}</td>
+                <td style="padding: 15px;">${structured_data[i].Region}</td>
+                <td style="padding: 15px;">${structured_data[i].Pestle}</td>
+              </tr>`
+
+          }
+          body.innerHTML = table;
+      }
+    </script> -->
+  </body>
+</html>
