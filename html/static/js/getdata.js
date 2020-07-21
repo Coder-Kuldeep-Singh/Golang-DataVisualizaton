@@ -7,7 +7,7 @@
 
 function GetLocation(event) {
   var location = event.target.value;
-  console.log(location);
+  // console.log(location);
   var perpage = document.getElementById("perpage");
   var values = parseInt(perpage.value);
 
@@ -109,7 +109,7 @@ function GetLocation(event) {
     };
     GetALLData();
   } else {
-    console.log(body);
+    // console.log(body);
     body.innerHTML = body;
   }
 }
@@ -129,6 +129,8 @@ function Default_Table() {
   var GetALLData = async () => {
     const response = await fetch("/api/json/data");
     const myJson = await response.json(); //extract JSON from the http response
+
+    // for table
     var remains = document.getElementById("remaining");
     remains.innerHTML = `<span class="badge badge-dark" style="padding:10px;">
       Showing 1 to 10 of 1,000 entries
@@ -150,6 +152,53 @@ function Default_Table() {
         </tr>`;
     }
     body.innerHTML = table;
+
+    // for top ten topics
+
+    var Topics = [];
+    // console.log(myJson.Visual.length);
+    for (var idx = 0; idx < myJson.Visual.length; idx++) {
+      Topics.push(myJson.Visual[idx].topic);
+    }
+    const count = (names) =>
+      names.reduce((a, b) => ({ ...a, [b]: (a[b] || 0) + 1 }), {}); // don't forget to initialize the accumulator
+
+    let re = count(Topics);
+    var topics = [];
+    var counts = [];
+    for (var key in re) {
+      if (re.hasOwnProperty(key)) {
+        // console.log(key); //
+        topics.push(key);
+        counts.push(re[key]);
+        // console.log(re[key]); //
+      }
+    }
+
+    var top_results = kLargest(counts, 11, topics);
+    var cards = document.getElementById("cards");
+    console.log(cards);
+    var card_body = "";
+    for (var tp = 1; tp <= 10; tp++) {
+      console.log(top_results[tp].name);
+      card_body += `<div class="card" style=" height: 150px; width: 19%; text-align: center; margin: 5px;">
+                <span style="padding: 15px;">${top_results[
+                  tp
+                ].name.toUpperCase()}</span>
+                <span style="padding: 15px;">${top_results[tp].count}</span>
+                </div>
+      `;
+      //   console.log(top_results[tp].name);
+      //   // console.log(top_results[t].count);
+      // if (top_results[tp].name == "") {
+      //   // top_results[t].pop
+      //   const index = top_results.indexOf(tp);
+      //   if (index > -1) {
+      //     top_results.splice(index, 1);
+      //   }
+      // }
+    }
+    cards.innerHTML = card_body;
   };
   GetALLData();
 }
@@ -168,7 +217,7 @@ function SelectFilter(options) {
     // console.log(structured_data)
     var body = document.getElementById("table_body");
     var table = "";
-    console.log("selected value", selectedValue);
+    // console.log("selected value", selectedValue);
     for (var i = 0; i <= selectedValue; i++) {
       table += `<tr>
                 <td style="padding: 15px;">${myJson.Visual[i].title}</td>
@@ -183,4 +232,34 @@ function SelectFilter(options) {
     body.innerHTML = table;
   };
   GetALLData();
+}
+
+function kLargest(arr, k, topic) {
+  // Sort the given array arr
+  // in reverse order.
+  var sorted = arr.sort(function (a, b) {
+    return a - b;
+  });
+  //     console.log(arr.sort());
+  sorted.reverse();
+
+  // topic.sort();
+  // topic.reverse();
+
+  // Print the first kth
+  // largest elements
+  var results = [
+    {
+      name: "",
+      count: 0,
+    },
+  ];
+  for (var i = 0; i < k; i++) {
+    // console.log(arr[i] + " ");
+    results.push({
+      name: topic[i],
+      count: arr[i],
+    });
+  }
+  return results;
 }
