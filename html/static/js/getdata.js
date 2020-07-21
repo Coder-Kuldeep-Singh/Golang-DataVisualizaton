@@ -177,10 +177,10 @@ function Default_Table() {
 
     var top_results = kLargest(counts, 11, topics);
     var cards = document.getElementById("cards");
-    console.log(cards);
+    // console.log(cards);
     var card_body = "";
     for (var tp = 1; tp <= 10; tp++) {
-      console.log(top_results[tp].name);
+      // console.log(top_results[tp].name);
       card_body += `<div class="card" style=" height: 150px; width: 19%; text-align: center; margin: 5px;">
                 <span style="padding: 15px;">${top_results[
                   tp
