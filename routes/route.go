@@ -14,7 +14,8 @@ func SetupRouter() *gin.Engine {
 	router.LoadHTMLGlob("html/templates/*")
 	router.Static("/home", "html/static")
 
-	router.GET("/", controllers.TableDataSend)
+	router.GET("/cloud", controllers.WordCloud)
+	router.GET("/radar", controllers.Radar)
 	api := router.Group("/api")
 	{
 		api.GET("/json/data", services.GetAll)
