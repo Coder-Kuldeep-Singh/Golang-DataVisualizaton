@@ -56,7 +56,7 @@ function GetLocation(event) {
         }
       }
       // console.log(dropdown_locations.);
-
+      // dropdown_locations.sort();
       var dropdown_length = dropdown_locations.length;
       // console.log(dropdown_length);
 
@@ -72,7 +72,7 @@ function GetLocation(event) {
         for (var j = 1; j <= values; j++) {
           // console.log(dropdown_locations.Title);
           if (location != "") {
-            table += `<tr>
+            table += `<tr style="font-size:12px;color:blue">
                     <td style="padding: 15px;">${dropdown_locations[j].Title}</td>
                     <td style="padding: 15px;">${dropdown_locations[j].Topic}</td>
                     <td style="padding: 15px;">${dropdown_locations[j].Start_Year}</td>
@@ -90,7 +90,7 @@ function GetLocation(event) {
         if (location != "") {
           for (var j = 1; j <= dropdown_length; j++) {
             // Show(drop, New_location, existing, para);
-            table += `<tr>
+            table += `<tr  style="font-size:12px;color:blue">
                       <td style="padding: 15px;">${dropdown_locations[j].Title}</td>
                       <td style="padding: 15px;">${dropdown_locations[j].Topic}</td>
                       <td style="padding: 15px;">${dropdown_locations[j].Start_Year}</td>
@@ -129,7 +129,7 @@ function Default_Table() {
   var GetALLData = async () => {
     const response = await fetch("/api/json/data");
     const myJson = await response.json(); //extract JSON from the http response
-
+    // myJson.Visual.sort();
     // for table
     var remains = document.getElementById("remaining");
     remains.innerHTML = `<span class="badge badge-dark" style="padding:10px;">
@@ -141,7 +141,7 @@ function Default_Table() {
     var table = "";
     for (var i = 1; i <= 10; i++) {
       // console.log(structured_data[i].Title);
-      table += `<tr>
+      table += `<tr  style="font-size:12px;color:blue">
           <td style="padding: 15px;">${myJson.Visual[i].title}</td>
           <td style="padding: 15px;">${myJson.Visual[i].topic}</td>
           <td style="padding: 15px;">${myJson.Visual[i].start_year}</td>
@@ -209,6 +209,7 @@ function SelectFilter(options) {
   var GetALLData = async () => {
     const response = await fetch("/api/json/data");
     const myJson = await response.json(); //extract JSON from the http response
+    // myJson.Visual.sort();
     var remains = document.getElementById("remaining");
     remains.innerHTML = `<span class="badge badge-dark"  style="padding:10px;">
       Showing 1 to ${selectedValue} of ${myJson.Visual.length} entries
@@ -219,7 +220,7 @@ function SelectFilter(options) {
     var table = "";
     // console.log("selected value", selectedValue);
     for (var i = 0; i <= selectedValue; i++) {
-      table += `<tr>
+      table += `<tr  style="font-size:12px;color:blue">
                 <td style="padding: 15px;">${myJson.Visual[i].title}</td>
                 <td style="padding: 15px;">${myJson.Visual[i].topic}</td>
                 <td style="padding: 15px;">${myJson.Visual[i].start_year}</td>
