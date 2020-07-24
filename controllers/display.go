@@ -12,29 +12,20 @@ func PageNotFound(c *gin.Context) {
 }
 
 func WordCloud(c *gin.Context) {
-	// titles := AllTitles()
+
 	c.HTML(http.StatusOK, "cloud.html", gin.H{
 		"payload": Decoded(),
 		"top":     TopTen(),
 		"cloud":   CloudChart(),
 	})
-	// c.HTML(http.StatusOK, "script.js", gin.H{
-	// 	"payload": Decoded(),
-	// 	"top":     TopTen(),
-	// 	"cloud":   CloudChart(),
-	// })
 }
 
 func Radar(c *gin.Context) {
-	// titles := AllTitles()
+
+	// c.Header().Set("Content-Type", "text/html")
 	c.HTML(http.StatusOK, "radar.html", gin.H{
 		"payload": Decoded(),
 		"top":     TopTen(),
 		"cloud":   CloudChart(),
 	})
-	// c.HTML(http.StatusOK, "script.js", gin.H{
-	// 	"payload": Decoded(),
-	// 	"top":     TopTen(),
-	// 	"cloud":   CloudChart(),
-	// })
 }
