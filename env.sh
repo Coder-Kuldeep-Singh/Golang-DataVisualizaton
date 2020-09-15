@@ -1,0 +1,5 @@
+export DBHOST="localhost"
+export DBPORT="3306"
+export DBUSER="root"
+export DBNAME="personal"
+export DBPASS="12qwaszx"
